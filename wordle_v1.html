@@ -1,0 +1,140 @@
+<html>
+<head>
+    <title>Wordle</title>
+    <style>
+        * {
+            text-align: center;
+            text-transform: capitalize;
+        }
+
+        td {
+            border: red 2px solid;
+            min-width: 2em;
+            height: 2em;
+        }
+    </style>
+</head>
+<body>
+    <div style="margin:auto; display: inline-block;">
+        <table id="board">
+            <tr><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td></td><td></td><td></td><td></td><td></td></tr>
+        </table>
+    </div>
+    <br />
+    <div style="margin:auto; display: inline-block;">
+        <table id="keyboard">
+            <tr>
+                <td>q</td>
+                <td>w</td>
+                <td>e</td>
+                <td>r</td>
+                <td>t</td>
+                <td>y</td>
+                <td>u</td>
+                <td>i</td>
+                <td>o</td>
+                <td>p</td>
+            </tr>
+            <tr>
+                <td>a</td>
+                <td>s</td>
+                <td>d</td>
+                <td>f</td>
+                <td>g</td>
+                <td>h</td>
+                <td>j</td>
+                <td>k</td>
+                <td>l</td>
+            </tr>
+            <tr>
+                <td>Enter</td>
+                <td>z</td>
+                <td>x</td>
+                <td>c</td>
+                <td>v</td>
+                <td>b</td>
+                <td>n</td>
+                <td>m</td>
+                <td colspan="2">BKSP</td>
+            </tr>
+        </table>
+    </div>
+    <script type="text/javascript">
+        var wordSize = 5;
+        var targetWord = 'FIGHT';
+        var attemptsArray = [];
+        var attemptsCounter = 0;
+        var attemptsLimit = 6;
+        var currentWord = '';
+        var finished = false;
+
+        document.querySelectorAll('#keyboard td').forEach(e => {
+            e.id = e.innerText;
+            e.addEventListener("click", function () {
+                if (attemptsCounter === attemptsLimit || finished) {
+                    return;
+                }
+                var currentCellIndex = (attemptsCounter * wordSize) + currentWord.length;
+                if (this.innerText === 'BKSP') {
+                    if (currentWord.length > 0) {
+                        currentWord = currentWord.substring(0, currentWord.length - 1);
+                        document.querySelectorAll('#board td')[currentCellIndex].innerText = '';
+                        return;
+                    }
+                    return;
+                }
+
+                if (this.innerText === 'Enter') {
+                    if (currentWord.length < wordSize) {
+                        alert('Please finish the word');
+                        return;
+                    }
+                    if (currentWord.length === wordSize) {
+                        if (currentWord === targetWord) {
+                            finished = true;
+                            alert("You won!");
+                        }
+                        else {
+                            for (var i = 0; i < currentWord.length; i++) {
+                                if (targetWord.indexOf(currentWord[i]) === i) {
+                                    // green background on both board and keyboard
+                                    document.getElementById(currentWord[i]).style.backgroundColor = 'green';
+                                    document.querySelectorAll('#board td')[(attemptsCounter * wordSize) + i].style.backgroundColor = 'green';
+                                } else {
+                                    if (targetWord.indexOf(currentWord[i]) === -1) {
+                                        // grey background on both board and keyboard
+                                        document.getElementById(currentWord[i]).style.backgroundColor = 'grey';
+                                        document.querySelectorAll('#board td')[(attemptsCounter * wordSize) + i].style.backgroundColor = 'grey';
+                                    } else {
+                                        // yellow background on both board and keyboard
+                                        document.getElementById(currentWord[i]).style.backgroundColor = 'yellow';
+                                        document.querySelectorAll('#board td')[(attemptsCounter * wordSize) + i].style.backgroundColor = 'yellow';
+                                    }
+                                }
+                            }
+                            attemptsArray.push(currentWord);
+                            attemptsCounter++;
+                            currentWord = '';
+                        }
+                    }
+                } else {
+                    if (currentWord.length < wordSize) {
+                        currentWord += this.innerText;
+                        // set the letter in the appropriate box
+                        document.querySelectorAll('#board td')[currentCellIndex].innerText = this.innerText;
+                    }
+                }
+                if (attemptsCounter === attemptsLimit) {
+                    alert("Sorry! you are out of attempts");
+                }
+            })
+        });
+
+    </script>
+</body>
+</html>
