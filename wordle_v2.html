@@ -17,6 +17,19 @@
 </head>
 
 <body>
+    <div>
+        select word size: <div style="margin:auto;">
+            <button onclick="wordSize = this.innerText; generateBoard();">5</button>
+            <button onclick="wordSize = this.innerText; generateBoard();">6</button>
+            <button onclick="wordSize = this.innerText; generateBoard();">7</button>
+            <button onclick="wordSize = this.innerText; generateBoard();">8</button>
+        </div>
+        <select onchange="wordSize = this.value; generateBoard();">
+            <option selected>5</option>
+            <option>6</option>
+            <option>7</option>
+        </select>
+    </div>
     <div style="margin:auto; display: inline-block;">
         <table id="board">
 
@@ -64,8 +77,8 @@
     <script type="text/javascript">
         var wordsArray = ['ABOVE', 'SOUND', 'RYTHM', 'WRONG', 'LIGHT', 'SLIME', 'BLUES'];
         var targetWord = wordsArray[Math.floor(Math.random() * wordsArray.length)];
-        var wordSize = 6;
-        var attemptsLimit = 10;
+        var wordSize = 5;
+        var attemptsLimit = 6;
         generateBoard();
         var attemptsArray = [];
         var attemptsCounter = 0;
@@ -135,6 +148,7 @@
         });
 
         function generateBoard() {
+            document.getElementById('board').innerHTML = '';
             for (let rowIndex = 0; rowIndex < attemptsLimit; rowIndex++) {
                 // create row
                 const row = document.createElement('tr');
