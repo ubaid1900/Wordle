@@ -19,15 +19,15 @@
 <body>
     <div>
         select word size: <div style="margin:auto;">
-            <button onclick="wordSize = this.innerText; generateBoard();">5</button>
-            <button onclick="wordSize = this.innerText; generateBoard();">6</button>
-            <button onclick="wordSize = this.innerText; generateBoard();">7</button>
-            <button onclick="wordSize = this.innerText; generateBoard();">8</button>
+            <button onclick="wordSize = Number(this.innerText); generateBoard();">5</button>
+            <button onclick="wordSize = Number(this.innerText); generateBoard();">6</button>
+            <!-- <button onclick="wordSize = this.innerText; generateBoard();">7</button>
+            <button onclick="wordSize = this.innerText; generateBoard();">8</button> -->
         </div>
         <select onchange="wordSize = this.value; generateBoard();">
             <option selected>5</option>
             <option>6</option>
-            <option>7</option>
+            <!-- <option>7</option> -->
         </select>
     </div>
     <div style="margin:auto; display: inline-block;">
@@ -75,10 +75,11 @@
         </table>
     </div>
     <script type="text/javascript">
-        var wordsArray = ['ABOVE', 'SOUND', 'RYTHM', 'WRONG', 'LIGHT', 'SLIME', 'BLUES'];
-        var targetWord = wordsArray[Math.floor(Math.random() * wordsArray.length)];
+        var wordsArray = ['ABOVE', 'SOUND', 'RYTHM', 'WRONG', 'LIGHT', 'SLIME', 'BLUES',
+            'PLAYER', 'TANKED', 'GROUND', 'WRONGS', 'PLIGHT', 'CHANGE', 'LENGTH'];
         var wordSize = 5;
         var attemptsLimit = 6;
+        var targetWord = '';
         generateBoard();
         var attemptsArray = [];
         var attemptsCounter = 0;
@@ -148,6 +149,13 @@
         });
 
         function generateBoard() {
+            currentWord = '';
+            attemptsArray = [];
+            attemptsCounter = 0;
+            currentWord = '';
+            finished = false;
+            var nLetterWordsArray = wordsArray.filter(w => w.length == wordSize);
+            targetWord = nLetterWordsArray[Math.floor(Math.random() * wordsArray.length)];
             document.getElementById('board').innerHTML = '';
             for (let rowIndex = 0; rowIndex < attemptsLimit; rowIndex++) {
                 // create row
