@@ -12,8 +12,12 @@
             border: red 2px solid;
             min-width: 2em;
             height: 2em;
+            font-weight: bold;
+            cursor: pointer;
+            user-select: none;
         }
     </style>
+    <link id="theme" href="dark.css" rel="stylesheet">
 </head>
 
 <body>
@@ -29,6 +33,8 @@
             <option>6</option>
             <!-- <option>7</option> -->
         </select>
+        <br>
+        Dark Mode: <input id="uiMode" type="checkbox" checked onchange="switchTheme(event.target.checked)" />
     </div>
     <div style="margin:auto; display: inline-block;">
         <table id="board">
@@ -96,7 +102,7 @@
                 if (this.innerText === 'BKSP') {
                     if (currentWord.length > 0) {
                         currentWord = currentWord.substring(0, currentWord.length - 1);
-                        document.querySelectorAll('#board td')[currentCellIndex].innerText = '';
+                        document.querySelectorAll('#board td')[currentCellIndex - 1].innerText = '';
                         return;
                     }
                     return;
@@ -109,7 +115,11 @@
                     }
                     if (currentWord.length === wordSize) {
                         if (currentWord === targetWord) {
-                            finished = true;
+                            finished = true; for (var i = 0; i < currentWord.length; i++) {
+                                // green background on both board and keyboard
+                                document.getElementById(currentWord[i]).style.backgroundColor = 'green';
+                                document.querySelectorAll('#board td')[(attemptsCounter * wordSize) + i].style.backgroundColor = 'green';
+                            }
                             alert("You won!");
                         }
                         else {
@@ -124,9 +134,9 @@
                                         document.getElementById(currentWord[i]).style.backgroundColor = 'grey';
                                         document.querySelectorAll('#board td')[(attemptsCounter * wordSize) + i].style.backgroundColor = 'grey';
                                     } else {
-                                        // yellow background on both board and keyboard
-                                        document.getElementById(currentWord[i]).style.backgroundColor = 'yellow';
-                                        document.querySelectorAll('#board td')[(attemptsCounter * wordSize) + i].style.backgroundColor = 'yellow';
+                                        // yellowish background on both board and keyboard
+                                        document.getElementById(currentWord[i]).style.backgroundColor = '#b59f3b';
+                                        document.querySelectorAll('#board td')[(attemptsCounter * wordSize) + i].style.backgroundColor = '#b59f3b';
                                     }
                                 }
                             }
@@ -155,8 +165,11 @@
             currentWord = '';
             finished = false;
             var nLetterWordsArray = wordsArray.filter(w => w.length == wordSize);
-            targetWord = nLetterWordsArray[Math.floor(Math.random() * wordsArray.length)];
+            targetWord = nLetterWordsArray[Math.floor(Math.random() * nLetterWordsArray.length)];
             document.getElementById('board').innerHTML = '';
+            var elemMode = document.getElementById('uiMode');
+            var isDarkMode = elemMode ? elemMode.checked : false;
+            switchTheme(isDarkMode);
             for (let rowIndex = 0; rowIndex < attemptsLimit; rowIndex++) {
                 // create row
                 const row = document.createElement('tr');
@@ -166,6 +179,16 @@
                 }
                 document.getElementById('board').append(row);
             }
+        }
+
+        function switchTheme(isDarkMode) {
+            if (isDarkMode) {
+                document.getElementById('theme').href = 'dark.css';
+            }
+            else {
+                document.getElementById('theme').href = 'light.css';
+            }
+
         }
     </script>
 </body>
