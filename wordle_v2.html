@@ -9,7 +9,7 @@
         }
 
         td {
-            border: red 2px solid;
+            border: rgb(212, 61, 61) 2px solid;
             min-width: 2em;
             height: 2em;
             font-weight: bold;
@@ -21,21 +21,29 @@
 </head>
 
 <body>
-    <div>
-        select word size: <div style="margin:auto;">
-            <button onclick="wordSize = Number(this.innerText); generateBoard();">5</button>
-            <button onclick="wordSize = Number(this.innerText); generateBoard();">6</button>
-            <!-- <button onclick="wordSize = this.innerText; generateBoard();">7</button>
+    <a href="#" style="float: right;" onclick="openSettingsDialog()">settings</a>
+    <br />
+    <dialog id="settingsDialog" style="padding-top: 0; padding-right: 0;">
+        <div style="text-align-last: end;"><button id="btnCloseSettingsDialog" type="button"
+                onclick="closeSettingsDialog();">X</button></div>
+        <div style="padding-top: 16; padding-right: 16;">
+            <label>
+                select word size:</label>
+            <div style="margin:auto;">
+                <button onclick="wordSize = Number(this.innerText); generateBoard();">5</button>
+                <button onclick="wordSize = Number(this.innerText); generateBoard();">6</button>
+                <!-- <button onclick="wordSize = this.innerText; generateBoard();">7</button>
             <button onclick="wordSize = this.innerText; generateBoard();">8</button> -->
+            </div>
+            <select style="display: none;" onchange="wordSize = this.value; generateBoard();">
+                <option selected>5</option>
+                <option>6</option>
+                <!-- <option>7</option> -->
+            </select>
+            <br>
+            Dark Mode: <input id="uiMode" type="checkbox" checked onchange="switchTheme(event.target.checked)" />
         </div>
-        <select onchange="wordSize = this.value; generateBoard();">
-            <option selected>5</option>
-            <option>6</option>
-            <!-- <option>7</option> -->
-        </select>
-        <br>
-        Dark Mode: <input id="uiMode" type="checkbox" checked onchange="switchTheme(event.target.checked)" />
-    </div>
+    </dialog>
     <div style="margin:auto; display: inline-block;">
         <table id="board">
 
@@ -189,6 +197,14 @@
                 document.getElementById('theme').href = 'light.css';
             }
 
+        }
+
+        function openSettingsDialog() {
+            document.getElementById('settingsDialog').showModal();
+        }
+
+        function closeSettingsDialog() {
+            document.getElementById('settingsDialog').close();
         }
     </script>
 </body>
