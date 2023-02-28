@@ -167,6 +167,13 @@
         });
 
         function generateBoard() {
+            if (attemptsCounter > 0) {
+                var wantSwitch = confirm("The game is in progress. Are you sure you want to switch to a new game?");
+                if (!wantSwitch) {
+                    return;
+                }
+            }
+            document.querySelectorAll('#keyboard td').forEach(p => p.style.backgroundColor = 'unset');
             currentWord = '';
             attemptsArray = [];
             attemptsCounter = 0;
